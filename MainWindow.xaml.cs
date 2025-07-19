@@ -55,7 +55,7 @@ namespace MatchGame
             Random random = new Random();//cria um novo gerador de números aleatorios
             foreach (TextBlock textBlock in mainGrind.Children.OfType<TextBlock>())
             {
-                if (textBlock.Text != "timeTextBlock")
+                if (textBlock.Name != "timeTextBlock")
                 {
                 textBlock.Visibility = Visibility.Visible;
                 int index = random.Next(animalEmoji.Count);
