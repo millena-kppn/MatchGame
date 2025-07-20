@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace MatchGame
 {
+    using System.Windows.Media;//para mudar as cores 
     using System.Windows.Threading;
     public partial class MainWindow : Window
     {
@@ -67,7 +68,6 @@ namespace MatchGame
             timer.Start();
             tenthsOfSecondsElapsed = 0;
             matchesFound = 0;
-
         }
         TextBlock lastTextBlockClicked;
         bool findingMacth = false;
@@ -79,7 +79,8 @@ namespace MatchGame
                 textBlock.Visibility = Visibility.Hidden;
                 lastTextBlockClicked = textBlock;
                 findingMacth = true;
-            }else if (textBlock.Text == lastTextBlockClicked.Text)
+            }
+            else if (textBlock.Text == lastTextBlockClicked.Text)
             {
                 matchesFound++;
                 textBlock.Visibility= Visibility.Hidden;
@@ -87,7 +88,23 @@ namespace MatchGame
             }
             else
             {
-                lastTextBlockClicked.Visibility= Visibility.Visible;
+                // Muda a cor de fundo dos dois blocos para vermelho (indicando erro)
+                textBlock.Background = Brushes.Red;
+                lastTextBlockClicked.Background = Brushes.Red;
+                // Espera 0.5 segundos antes de "resetar" a cor e mostrar de novo
+                DispatcherTimer errorTimer = new DispatcherTimer();
+                errorTimer.Interval = TimeSpan.FromSeconds(0.5);
+                errorTimer.Tick += (s, args) =>
+                {
+                    errorTimer.Stop();
+                    // Mostra novamente os dois blocos
+                    lastTextBlockClicked.Visibility = Visibility.Visible;
+                    textBlock.Visibility = Visibility.Visible;
+                    // Restaura a cor original (por exemplo, branco)
+                    lastTextBlockClicked.Background = Brushes.White;
+                    textBlock.Background = Brushes.White;
+                };
+                errorTimer.Start();
                 findingMacth = false;
             }
         }
